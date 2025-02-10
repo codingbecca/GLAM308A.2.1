@@ -89,3 +89,29 @@ const robin1 = new Adventurer("Robin", "Healer");
 console.log(robin1);
 const leo = new Companion("Leo", "Cat", robin1);
 const frank = new Companion("Frank", "Flea", leo);
+
+// ================== Part 5 ================
+console.log("==== Part 5 ====");
+
+class AdventurerFactory {
+  constructor(role) {
+    this.role = role;
+    this.adventurers = [];
+  }
+
+  generate(name) {
+    const newAdventurer = new Adventurer(name, this.role);
+    this.adventurers.push(newAdventurer);
+  }
+
+  findByIndex(index) {
+    return this.adventurers[index];
+  }
+
+  findByName(name) {
+    return this.adventurers.find((a) => a.name === name);
+  }
+}
+
+const healers = new AdventurerFactory("Healer");
+const robin2 = healers.generate("Robin");
