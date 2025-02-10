@@ -36,7 +36,8 @@ class Character {
   }
   roll(mod = 0) {
     const result = Math.floor(Math.random() * 20) + 1 + mod;
-    console.log(`${this.name} rolled a ${result}.`);
+    //console.log(`${this.name} rolled a ${result}.`);
+    return result;
   }
 }
 
@@ -70,6 +71,35 @@ class Adventurer extends Character {
     console.log(`${this.name} is scouting ahead...`);
     super.roll();
   }
+
+  //==== Part 6 ====
+  // Create an additional method, duel(), for the Adventurer class with the following functionality:
+  // Accept an Adventurer as a parameter.
+  // Use the roll() functionality to create opposing rolls for each adventurer.
+  // Subtract 1 from the adventurer with the lower roll.
+  // Log the results of this “round” of the duel, including the rolls and current health values.
+  // Repeat this process until one of the two adventurers reaches 50 health.
+  // Log the winner of the duel: the adventurer still above 50 health.
+  duel(adventurer) {
+    while (this.health >= 50 && adventurer.health >= 50) {
+      const opponentRoll = adventurer.roll();
+      const roll = super.roll();
+      if (roll < opponentRoll) {
+        this.health--;
+      } else {
+        adventurer.health--;
+      }
+      console.log(
+        `Your opponent ${adventurer.name} rolled ${opponentRoll}. You rolled ${roll}. Your opponent has ${adventurer.health} health, and you have ${this.health} health.`
+      );
+    }
+
+    if (this.health < 50) {
+      console.log(`${this.name} lost, ${adventurer.name} won the duel`);
+    } else if (adventurer.health < 50) {
+      console.log(`${adventurer.name} lost, ${this.name} won the duel`);
+    }
+  }
 }
 
 class Companion extends Character {
@@ -102,6 +132,7 @@ class AdventurerFactory {
   generate(name) {
     const newAdventurer = new Adventurer(name, this.role);
     this.adventurers.push(newAdventurer);
+    return newAdventurer;
   }
 
   findByIndex(index) {
@@ -115,3 +146,7 @@ class AdventurerFactory {
 
 const healers = new AdventurerFactory("Healer");
 const robin2 = healers.generate("Robin");
+
+const sherif = new Adventurer("Sherif Nottingham", "Fighter");
+
+robin2.duel(sherif);
